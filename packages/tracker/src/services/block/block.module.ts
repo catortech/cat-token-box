@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { TxModule } from '../tx/tx.module';
 import { CommonModule } from '../common/common.module';
+import { DataSource } from 'typeorm';
+import { ormConfig } from 'src/config/db.config';
 
 @Module({
   imports: [
@@ -15,7 +17,16 @@ import { CommonModule } from '../common/common.module';
     ConfigModule,
     CommonModule,
   ],
-  providers: [BlockService],
+  providers: [
+    BlockService,
+    {
+      provide: DataSource,
+      useFactory: async () => {
+        const dataSource = new DataSource(ormConfig);
+        return await dataSource.initialize();
+      },
+    },
+  ],
   exports: [BlockService],
 })
 export class BlockModule {}

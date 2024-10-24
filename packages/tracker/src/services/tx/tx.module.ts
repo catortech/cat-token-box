@@ -7,6 +7,8 @@ import { CommonModule } from '../common/common.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RpcModule } from '../rpc/rpc.module';
 import { TokenOrderEntity } from '../../entities/tokenOrder.entity';
+import { DataSource } from 'typeorm';
+import { ormConfig } from 'src/config/db.config';
 @Module({
   imports: [
     TypeOrmModule.forFeature([TxEntity, TokenInfoEntity, TokenOrderEntity]),
@@ -14,7 +16,16 @@ import { TokenOrderEntity } from '../../entities/tokenOrder.entity';
     RpcModule,
     ScheduleModule.forRoot(),
   ],
-  providers: [TxService],
+  providers: [
+    TxService,
+    {
+      provide: DataSource,
+      useFactory: async () => {
+        const dataSource = new DataSource(ormConfig);
+        return await dataSource.initialize();
+      },
+    },
+  ],
   exports: [TxService],
 })
 export class TxModule {}
