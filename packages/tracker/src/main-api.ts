@@ -19,7 +19,7 @@ async function bootstrap() {
     .setVersion('0.1')
     .setLicense('MIT License', 'https://opensource.org/licenses/MIT')
     .setContact('CAT Protocol', 'https://catprotocol.org', '')
-    .addServer(`http://127.0.0.1:${process.env.API_PORT || 3000}/api`)
+    .addServer(`http://cator.tech:${process.env.API_PORT || 3000}/api`)
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('/', app, swaggerDocument, {
